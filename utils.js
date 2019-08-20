@@ -306,3 +306,15 @@ export function __setObjByNotation (obj, str, val) {
     while (str.length > 1) obj = obj[str.shift()];
     return obj[str.shift()] = val;
 }
+
+export function __replaceSpacesWithNbspHtmlCZ(text) {
+  // check if variable is string
+  if ( Object.prototype.toString.call(text) !== "[object String]" )
+    return false;
+
+  const regex = /(?<=\s[aiouksvz])\s/gi;
+  const newText = text.replace(regex, '&nbsp;');
+
+  return newText;
+
+};
