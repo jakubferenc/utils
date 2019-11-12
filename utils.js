@@ -1,4 +1,17 @@
 // https://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript#3855394
+
+export function __replaceSpacesInTextCZ(text) {
+//   // check if variable is string
+  if (Object.prototype.toString.call(text) !== '[object String]') {
+    throw new Error('The argument is not a string');
+  }
+
+  const regex = /(?<=\s[aiouksvz])\s/gi;
+  const newText = text.replace(regex, '&nbsp;');
+
+  return newText;
+}
+
 export function __getQueryStringParams() {
   const parameters = window.location.search.substr(1).split('&');
 
