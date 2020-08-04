@@ -1,15 +1,21 @@
 // https://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript#3855394
 
-export function __replaceSpacesInTextCZ(text) {
-//   // check if variable is string
-  if (Object.prototype.toString.call(text) !== '[object String]') {
-    throw new Error('The argument is not a string');
+// https://stackoverflow.com/a/384380
+export function __isELement(obj) {
+
+  try {
+    //Using W3 DOM2 (works for FF, Opera and Chrome)
+    return obj instanceof HTMLElement;
+  }
+  catch(e){
+    //Browsers not supporting W3 DOM2 don't have HTMLElement and
+    //an exception is thrown and we end up here. Testing some
+    //properties that all elements have (works on IE7)
+    return (typeof obj==="object") &&
+      (obj.nodeType===1) && (typeof obj.style === "object") &&
+      (typeof obj.ownerDocument ==="object");
   }
 
-  const regex = /(?<=\s[aiouksvz])\s/gi;
-  const newText = text.replace(regex, '&nbsp;');
-
-  return newText;
 }
 
 export function __getQueryStringParams() {
@@ -42,21 +48,22 @@ export function __triggerEvent(el, type) {
     const e = new Event(type);
     el.dispatchEvent(e);
   } else {
-    // IE 8
-    const e = document.createEventObject();
-    e.eventType = type;
-    el.fireEvent(`on${e.eventType}`, e);
+      // IE 8
+      const e = document.createEventObject();
+      e.eventType = type;
+      el.fireEvent('on'+e.eventType, e);
   }
 }
 
 export function __keycodeIsPrintableCharacter(keycode) {
 
-  const valid =    (keycode > 47 && keycode < 58) // number keys
-    || keycode == 32 || keycode == 13 // spacebar & return key(s) (if you want to allow carriage returns)
-    || (keycode > 64 && keycode < 91) // letter keys
-    || (keycode > 95 && keycode < 112) // numpad keys
-    || (keycode > 185 && keycode < 193) // ;=,-./` (in order)
-    || (keycode > 218 && keycode < 223); // [\]' (in order)
+  const valid =
+    (keycode > 47 && keycode < 58) || // number keys
+    keycode == 32 || keycode == 13 || // spacebar & return key(s) (if you want to allow carriage returns)
+    (keycode > 64 && keycode < 91) || // letter keys
+    (keycode > 95 && keycode < 112) || // numpad keys
+    (keycode > 185 && keycode < 193) || // ;=,-./` (in order)
+    (keycode > 218 && keycode < 223); // [\]' (in order)
   // https://stackoverflow.com/questions/12467240/determine-if-javascript-e-keycode-is-a-printable-non-control-character#answer-12467610
 
   return valid;
@@ -301,32 +308,30 @@ export function __removeClass(elements, classes) {
   }
 }
 
-export function __getObjectByNotation(baseObj, path) {
+export function __getObjectByNotation (baseObj, path) {
   const paths = path.split('.');
   const len = paths.length;
 
-  for (let i = 0; i < len; i++) {
+  for(let i=0; i<len; i++) {
     baseObj = baseObj[paths[i]];
   }
   return baseObj;
 
-}
+};
 
 // https://stackoverflow.com/a/10934946
-export function __setObjByNotation(obj, str, val) {
-  str = str.split('.');
-  while (str.length > 1) obj = obj[str.shift()];
-  return obj[str.shift()] = val;
+export function __setObjByNotation (obj, str, val) {
+    str = str.split(".");
+    while (str.length > 1) obj = obj[str.shift()];
+    return obj[str.shift()] = val;
 }
 
-export function __replaceSpacesWithNbspHtmlCZ(text) {
+export function _replaceSpacesInTextCZ(text) {
   // check if variable is string
-  if (Object.prototype.toString.call(text) !== '[object String]')
-    {return false;}
+  if (Object.prototype.toString.call(text) !== '[object String]') { return false; }
 
   const regex = /(?<=\s[aiouksvz])\s/gi;
   const newText = text.replace(regex, '&nbsp;');
 
   return newText;
-
 }
